@@ -35,29 +35,71 @@ This repository provides evaluation code and checkpoints for 13 bimanual RLBench
 
 ## ⚙️ Environment Setup
 
-Install the simulator and its assets, then install the requirements for the selected policy in that environment.
+Run the commands from the EnergyBimanual repository root on a Linux machine with an NVIDIA GPU. RLBench uses CoppeliaSim for physics and OpenGL rendering. RoboTwin 2.0 uses SAPIEN and a Vulkan renderer. Select the Python environment for the benchmark you want to run.
 
-All RoboTwin 2.0 evaluations used the following environment.
+### Bimanual RLBench
 
-- Python 3.11
-- JAX/JAXLIB 0.5.3
-- Torch 2.7.1
-- Orbax Checkpoint 0.11.13
-- NVIDIA 550 (driver)
-- `openpi/.venv`
-
-| Benchmark | Runtime dependencies | Policy requirements |
-| --- | --- | --- |
-| Bimanual RLBench | Python 3.10, PyTorch 2.2.0, torchvision 0.17.0, PerAct² RLBench, PyRep, CoppeliaSim | [EnergyBimanual](requirements/rlbench.txt) |
-| RoboTwin 2.0 | SAPIEN 3.0.0b1, MPLib 0.2.1, cuRobo | [DP and DP3](requirements/diffusion.txt) · [π₀ and π₀.₅](requirements/openpi.txt) |
+Create a Python 3.10 environment for the bimanual RLBench simulator and policy. Unpack CoppeliaSim 4.1, set `COPPELIASIM_ROOT` to the directory containing its executable, and make its shared libraries and Qt plugins visible to PyRep.
 
 ```bash
+conda create -n energybimanual-rlbench python=3.10 -y
+conda activate energybimanual-rlbench
+
+export COPPELIASIM_ROOT=/path/to/CoppeliaSim_Edu_V4_1_0
+export LD_LIBRARY_PATH="$COPPELIASIM_ROOT${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export QT_QPA_PLATFORM_PLUGIN_PATH="$COPPELIASIM_ROOT"
+
+python -m pip install torch==2.2.0 torchvision==0.17.0 --index-url https://download.pytorch.org/whl/cu121
 python -m pip install -r requirements/rlbench.txt
 ```
 
-For RLBench, set `PERACT2_DATA_ROOT` to the 256 × 256 test split containing the task folders. CoppeliaSim needs a working display. [PerAct² installation](https://github.com/markusgrotz/peract_bimanual/blob/main/INSTALLATION.md) · [Test data](https://bimanual.github.io/)
+Install the PerAct² forks of PyRep and RLBench in this environment using the upstream editable-install instructions. The evaluator imports their bimanual arm and gripper action modes. On a headless server, configure an X display with OpenGL support so CoppeliaSim can render the camera observations. [PerAct² installation](https://github.com/markusgrotz/peract_bimanual/blob/main/INSTALLATION.md) · [RLBench revision](https://github.com/markusgrotz/RLBench/tree/8af748c51287989294e00c9c670e3330a0e35ed5)
 
-For RoboTwin, set `ROBOTWIN_ROOT` to the directory containing `assets/objects/` and `assets/embodiments/`. SAPIEN uses Vulkan for rendering. [RoboTwin installation and assets](https://robotwin-platform.github.io/doc/index.html)
+Download the **256 × 256 test split** for the tasks you want to evaluate. Point `PERACT2_DATA_ROOT` at the directory immediately above the task folders. For Push Box, check that the first saved episode and the bimanual action mode are accessible. [PerAct² test data](https://bimanual.github.io/)
+
+```bash
+export PERACT2_DATA_ROOT=/path/to/peract2/test
+test -f "$PERACT2_DATA_ROOT/bimanual_push_box/variation0/episodes/episode0/low_dim_obs.pkl"
+python -c "from rlbench.action_modes.action_mode import BimanualMoveArmThenGripper"
+```
+
+### RoboTwin 2.0
+
+All RoboTwin 2.0 evaluations in the paper used the `openpi/.venv` environment with the following versions.
+
+| Python | PyTorch | JAX | jaxlib | Orbax Checkpoint | NVIDIA driver |
+| --- | --- | --- | --- | --- | --- |
+| 3.11 | 2.7.1 | 0.5.3 | 0.5.3 | 0.11.13 | 550 |
+
+For a fresh environment, create it with `python3.11 -m venv /path/to/openpi/.venv`. Activate it and install the policy dependencies. The requirements select the CUDA 12 build of JAX. Use the matching CUDA build of torchvision 0.22.1 with PyTorch 2.7.1. [PyTorch installation options](https://pytorch.org/get-started/previous-versions/)
+
+```bash
+source /path/to/openpi/.venv/bin/activate
+export ROBOTWIN_ROOT=/path/to/RoboTwin
+python -m pip install torchvision==0.22.1 jaxlib==0.5.3 \
+  -r requirements/diffusion.txt -r requirements/openpi.txt
+```
+
+Install SAPIEN 3.0.0b1, MPLib 0.2.1 and cuRobo in the same interpreter. For the Franka camera pipeline, install a PyTorch3D build compatible with the installed PyTorch and CUDA versions. Download the RoboTwin object models, textures and robot embodiments into the external RoboTwin checkout. The evaluator reads these assets from `ROBOTWIN_ROOT`. [RoboTwin simulator installation and asset download](https://robotwin-platform.github.io/doc/usage/robotwin-install.html)
+
+```bash
+(cd "$ROBOTWIN_ROOT" && bash scripts/_download_assets.sh)
+```
+
+| Policy | Robot asset under `ROBOTWIN_ROOT/assets/embodiments/` | Policy inputs |
+| --- | --- | --- |
+| DP + DP | `franka-panda/` | Head and wrist RGB images and arm joint positions |
+| DP3 + DP3 | `franka-panda/` | A 1,024-point cloud and arm joint positions |
+| π₀ + π₀ and π₀.₅ + π₀.₅ | `aloha-agilex/` | Head and wrist RGB images, joint positions and a language instruction |
+
+Check that Vulkan lists the NVIDIA GPU and that the selected robot has its `config.yml`. The example below checks Franka. For ALOHA, use `aloha-agilex` as the embodiment.
+
+```bash
+vulkaninfo --summary
+embodiment=franka-panda
+test -d "$ROBOTWIN_ROOT/assets/objects"
+test -f "$ROBOTWIN_ROOT/assets/embodiments/$embodiment/config.yml"
+```
 
 ## 📦 Checkpoints
 
@@ -105,16 +147,10 @@ git apply --check patches/aloha-expert-seeds.patch
 git apply patches/aloha-expert-seeds.patch
 ```
 
-```bash
-python summarize_results.py rlbench --folder outputs/rlbench/energybimanual/5demo/seed0
-python summarize_results.py robotwin --folder outputs/robotwin/dp3/5demo/seed0
-```
-
 ## 🗂️ Project Structure
 
 ```text
 evaluate.py                  Evaluation entry point
-summarize_results.py         Task success rates
 rlbench2/                    RLBench policies and evaluator
 robotwin/                    RoboTwin policies, tasks and evaluator
 requirements/                Policy dependencies
