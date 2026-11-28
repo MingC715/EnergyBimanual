@@ -15,7 +15,6 @@ Jie&nbsp;Wei<sup>1</sup>,
 <sup>3</sup>Shenzhen Loop Area Institute
 <br><br>
 <a href="#manuscript-citation"><img src="https://img.shields.io/badge/Manuscript-Citation-blue" alt="Cite the EnergyBimanual manuscript"></a>
-<a href="evaluate.py"><img src="https://img.shields.io/badge/Code-Evaluation-black" alt="Evaluation code"></a>
 <a href="https://huggingface.co/mingchens/EnergyBimanual"><img src="https://img.shields.io/badge/Checkpoints-Hugging%20Face-yellow" alt="EnergyBimanual checkpoints on Hugging Face"></a>
 
 </div>
