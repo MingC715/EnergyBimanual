@@ -153,7 +153,6 @@ def main(usr_args):
     st_seed = 100000 * (1 + seed)
     suc_nums = []
     test_num = int(usr_args.get("episodes", 100))
-    topk = 1
 
     model = get_model(usr_args)
     st_seed, suc_num = eval_policy(task_name,
@@ -165,8 +164,6 @@ def main(usr_args):
                                    video_size=video_size,
                                    instruction_type=instruction_type)
     suc_nums.append(suc_num)
-
-    topk_success_rate = sorted(suc_nums, reverse=True)[:topk]
 
     file_path = os.path.join(save_dir, f"_result.txt")
     with open(file_path, "w") as file:

@@ -349,7 +349,7 @@ class RLBenchEnv:
                     f"SR: {total_reward:.2f}/{demo_id+1}",
                     "# valid demos", demo_id + 1
                 )
-        # Compensate for failed demos
+        # Every stored demo counts toward the denominator, including skipped resets.
         valid = len(var_demos) > 0
 
         return success_rate, valid, len(var_demos)
