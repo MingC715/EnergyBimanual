@@ -1,0 +1,3 @@
+Gemma is provided under and subject to the Gemma Terms of Use found at ai.google.dev/gemma/terms
+
+The released OpenPI composition checkpoints contain fine-tuned Gemma-derived parameters. Their use and distribution are subject to the use restrictions in section 3.2 of the enclosed Gemma Terms of Use (licenses/openpi-LICENSE_GEMMA.txt), including Google's Gemma Prohibited Use Policy. Upstream code notices are included in licenses/.

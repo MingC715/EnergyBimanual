@@ -1,0 +1,7 @@
+numpy<2
+einops>=0.4.1
+transformers==4.40.1
+diffusers==0.33.1
+natsort
+tqdm
+ftfy

@@ -1,0 +1,64 @@
+--- a/robotwin/suites/aloha/evaluate_rollout.py
++++ b/robotwin/suites/aloha/evaluate_rollout.py
+@@ -1,3 +1,4 @@
++import json
+ import os
+ import subprocess
+ 
+@@ -161,6 +162,7 @@
+                                    args,
+                                    model,
+                                    st_seed,
++                                   expert_skip_path=save_dir / 'expert_skips.jsonl',
+                                    test_num=test_num,
+                                    video_size=video_size,
+                                    instruction_type=instruction_type)
+@@ -182,11 +184,19 @@
+                 args,
+                 model,
+                 st_seed,
++                expert_skip_path,
+                 test_num=100,
+                 video_size=None,
+                 instruction_type=None):
+     print(f"\033[34mTask Name: {args['task_name']}\033[0m")
+     print(f"\033[34mPolicy Name: {args['policy_name']}\033[0m")
++
++    expert_skip_path.touch(exist_ok=False)
++
++    def record_expert_skip(seed, reason):
++        with expert_skip_path.open("a", encoding="utf-8") as stream:
++            stream.write(json.dumps({"seed": int(seed), "reason": reason}) + "\n")
++        print(f"Expert seed skipped: {seed} ({reason})", flush=True)
+ 
+     expert_check = True
+     TASK_ENV.suc = 0
+@@ -216,11 +226,18 @@
+                 episode_info = TASK_ENV.play_once()
+                 TASK_ENV.close_env()
+             except UnStableError as e:
++                record_expert_skip(now_seed, f"unstable expert scene: {e}")
+                 TASK_ENV.close_env()
+                 now_seed += 1
+                 args["render_freq"] = render_freq
+                 continue
+-            except Exception:
++            except Exception as exc:
++                if isinstance(exc, AssertionError) and str(exc) == "target_pose cannot be None for move action.":
++                    record_expert_skip(now_seed, "expert planner returned no grasp or move target")
++                    TASK_ENV.close_env()
++                    now_seed += 1
++                    args["render_freq"] = render_freq
++                    continue
+                 print(
+                     f"\nExpert check failed: seed={now_seed}",
+                     flush=True,
+@@ -239,6 +256,8 @@
+             succ_seed += 1
+             suc_test_seed_list.append(now_seed)
+         else:
++            reason = "expert planner failed" if not TASK_ENV.plan_success else "expert did not complete task"
++            record_expert_skip(now_seed, reason)
+             now_seed += 1
+             args["render_freq"] = render_freq
+             continue

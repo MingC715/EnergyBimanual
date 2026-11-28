@@ -1,0 +1,6 @@
+numpy<2
+einops>=0.4.1
+diffusers==0.33.1
+hydra-core>=1.2,<1.4
+omegaconf>=2.2,<2.4
+PyYAML
