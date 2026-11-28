@@ -79,9 +79,9 @@ sha256sum --check --ignore-missing CHECKSUMS.sha256
 
 | Demos per task | DP + DP | DP3 + DP3 | π₀ + π₀ | π₀.₅ + π₀.₅ |
 | ---: | --- | --- | --- | --- |
-| 5 | [dp/5demo.pt](CHECKSUMS.sha256#L6) | [dp3/5demo.pt](CHECKSUMS.sha256#L9) | [pi0/5demo/](CHECKSUMS.sha256#L41-L55) | [pi05/5demo/](CHECKSUMS.sha256#L90-L105) |
+| 5 | [dp/5demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/5demo.pt) | [dp3/5demo.pt](CHECKSUMS.sha256#L9) | [pi0/5demo/](CHECKSUMS.sha256#L41-L55) | [pi05/5demo/](CHECKSUMS.sha256#L90-L105) |
 | 10 | [dp/10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/10demo.pt) | [dp3/10demo.pt](CHECKSUMS.sha256#L7) | [pi0/10demo/](CHECKSUMS.sha256#L10-L23) | [pi05/10demo/](CHECKSUMS.sha256#L56-L74) |
-| 20 | [dp/20demo.pt](CHECKSUMS.sha256#L5) | [dp3/20demo.pt](CHECKSUMS.sha256#L8) | [pi0/20demo/](CHECKSUMS.sha256#L24-L40) | [pi05/20demo/](CHECKSUMS.sha256#L75-L89) |
+| 20 | [dp/20demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/20demo.pt) | [dp3/20demo.pt](CHECKSUMS.sha256#L8) | [pi0/20demo/](CHECKSUMS.sha256#L24-L40) | [pi05/20demo/](CHECKSUMS.sha256#L75-L89) |
 
 DP and DP3 use Franka. The π policies use ALOHA and require the complete checkpoint directory, including normalization statistics.
 
