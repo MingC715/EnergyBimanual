@@ -125,10 +125,38 @@ DP and DP3 use Franka. The π policies use ALOHA. Download the full π checkpoin
 
 ## 🧪 Evaluation
 
+### Bimanual RLBench
+
+Each command evaluates one EnergyBimanual checkpoint on all 13 tasks with a single seed. To run one task, replace `all` with its name, for example `bimanual_push_box`.
+
+**5 demonstrations per task**
+
 ```bash
 CUDA_VISIBLE_DEVICES=0 python evaluate.py rlbench \
-  --method energybimanual --demos 5 --task bimanual_push_box --seed 0
+  --method energybimanual --demos 5 --task all --seed 7
+```
 
+**10 demonstrations per task**
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python evaluate.py rlbench \
+  --method energybimanual --demos 10 --task all --seed 7
+```
+
+**20 demonstrations per task**
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python evaluate.py rlbench \
+  --method energybimanual --demos 20 --task all --seed 8
+```
+
+### RoboTwin 2.0
+
+The examples run DP3 + DP3 on `grab_roller` and π₀ + π₀ on `place_burger_fries`. Use `--task all` to run all six tasks for either policy.
+
+**5 demonstrations per task**
+
+```bash
 CUDA_VISIBLE_DEVICES=0 python evaluate.py robotwin \
   --method dp3 --demos 5 --task grab_roller --seed 0
 
@@ -136,12 +164,34 @@ CUDA_VISIBLE_DEVICES=1 python evaluate.py robotwin \
   --method pi0 --demos 5 --task place_burger_fries --seed 0
 ```
 
-Use `--task all` for the full task list and `--demos` with 5, 10 or 20 to select the checkpoint. The optional ALOHA patch skips a missing planner target during the expert check and records skipped scene seeds.
+**10 demonstrations per task**
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python evaluate.py robotwin \
+  --method dp3 --demos 10 --task grab_roller --seed 0
+
+CUDA_VISIBLE_DEVICES=1 python evaluate.py robotwin \
+  --method pi0 --demos 10 --task place_burger_fries --seed 0
+```
+
+**20 demonstrations per task**
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python evaluate.py robotwin \
+  --method dp3 --demos 20 --task grab_roller --seed 0
+
+CUDA_VISIBLE_DEVICES=1 python evaluate.py robotwin \
+  --method pi0 --demos 20 --task place_burger_fries --seed 0
+```
+
+The optional ALOHA patch records and skips scene seeds when the expert planner cannot find a target.
 
 ```bash
 git apply --check patches/aloha-expert-seeds.patch
 git apply patches/aloha-expert-seeds.patch
 ```
+
+**Note.** Due to a bug in RLBench2, some tasks may return no result during multi-task evaluation. Rerunning the affected tasks can resolve this issue. Some tasks may therefore have been evaluated more than once. We report the mean and standard deviation of the resulting success rates. For the journal version, we reevaluated the checkpoint used in the conference paper over multiple runs, using more random seeds than in the original evaluation.
 
 ## 🗂️ Project Structure
 
