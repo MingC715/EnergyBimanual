@@ -22,10 +22,11 @@ ROBOTWIN_TASKS = (
 
 def checkpoint_path(root, family, demos):
     if family in ("energyaction", "energybimanual"):
-        return root / "table1" / family / f"{demos}demo.pth"
+        return root / "RLBench" / f"{family}_{demos}demo.pth"
     if family in ("dp", "dp3"):
-        return root / "table2" / family / f"{demos}demo.pt"
-    return root / "table2" / family / f"{demos}demo"
+        return root / "RoboTwin2.0" / f"{family}_{demos}demo.pt"
+    policy = "pi0.5" if family == "pi05" else family
+    return root / "RoboTwin2.0" / f"{policy}_{demos}demo"
 
 
 def rlbench_command(args, task, checkpoint, output):
@@ -53,8 +54,8 @@ def rlbench_command(args, task, checkpoint, output):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     modes = parser.add_subparsers(dest="benchmark", required=True)
-    rl = modes.add_parser("rlbench", help="Table I, bimanual RLBench")
-    tw = modes.add_parser("robotwin", help="Table II, RoboTwin 2.0")
+    rl = modes.add_parser("rlbench", help="bimanual RLBench")
+    tw = modes.add_parser("robotwin", help="RoboTwin 2.0")
     rl.add_argument("--data-dir", default=os.environ.get("PERACT2_DATA_ROOT"), type=Path,
                     help="evaluation split containing task/variation*/episodes")
     tw.add_argument("--robotwin-root", default=os.environ.get("ROBOTWIN_ROOT"), type=Path,
@@ -68,7 +69,7 @@ def main():
         p.add_argument("--task", choices=("all", *tasks), default="all")
         p.add_argument("--seed", type=int, default=0)
         p.add_argument("--weights", type=Path, default=ROOT / "checkpoints",
-                       help="root containing table1/ and table2/")
+                       help="root containing RLBench/ and RoboTwin2.0/")
         p.add_argument("--output", type=Path, default=Path("outputs"))
         p.add_argument("--dry-run", action="store_true", help="show the exact launch commands")
     args = parser.parse_args()

@@ -103,29 +103,25 @@ test -f "$ROBOTWIN_ROOT/assets/embodiments/$embodiment/config.yml"
 
 ## 📦 Checkpoints
 
-The RLBench, DP and DP3 checkpoints are available for download. Each OpenPI checkpoint is linked when its complete directory is available. [Hugging Face model repository](https://huggingface.co/mingchens/EnergyBimanual)
-
-```bash
-sha256sum --check --ignore-missing CHECKSUMS.sha256
-```
+Weights are organized by benchmark, policy and demonstration count. Each link below opens a published checkpoint. [Hugging Face model repository](https://huggingface.co/mingchens/EnergyBimanual) · [Download instructions](docs/distribution.md)
 
 ### Bimanual RLBench
 
 | Demos per task | EnergyBimanual |
 | ---: | --- |
-| 5 | [energybimanual/5demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/5demo.pth) |
-| 10 | [energybimanual/10demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/10demo.pth) |
-| 20 | [energybimanual/20demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/20demo.pth) |
+| 5 | [energybimanual_5demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RLBench/energybimanual_5demo.pth) |
+| 10 | [energybimanual_10demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RLBench/energybimanual_10demo.pth) |
+| 20 | [energybimanual_20demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RLBench/energybimanual_20demo.pth) |
 
 ### RoboTwin 2.0
 
 | Demos per task | DP + DP | DP3 + DP3 | π₀ + π₀ | π₀.₅ + π₀.₅ |
 | ---: | --- | --- | --- | --- |
-| 5 | [dp/5demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/5demo.pt) | [dp3/5demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp3/5demo.pt) | [pi0/5demo/](CHECKSUMS.sha256#L41-L55) | [pi05/5demo/](CHECKSUMS.sha256#L90-L105) |
-| 10 | [dp/10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/10demo.pt) | [dp3/10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp3/10demo.pt) | [pi0/10demo/](CHECKSUMS.sha256#L10-L23) | [pi05/10demo/](CHECKSUMS.sha256#L56-L74) |
-| 20 | [dp/20demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/20demo.pt) | [dp3/20demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp3/20demo.pt) | [pi0/20demo/](CHECKSUMS.sha256#L24-L40) | [pi05/20demo/](CHECKSUMS.sha256#L75-L89) |
+| 5 | [dp_5demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp_5demo.pt) | [dp3_5demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp3_5demo.pt) | `pi0_5demo/` | `pi0.5_5demo/` |
+| 10 | [dp_10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp_10demo.pt) | [dp3_10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp3_10demo.pt) | `pi0_10demo/` | `pi0.5_10demo/` |
+| 20 | [dp_20demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp_20demo.pt) | [dp3_20demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/RoboTwin2.0/dp3_20demo.pt) | `pi0_20demo/` | `pi0.5_20demo/` |
 
-DP and DP3 use Franka. The π policies use ALOHA and require the complete checkpoint directory, including normalization statistics.
+DP and DP3 use Franka. The π policies use ALOHA. Download the full π checkpoint directory to keep its parameter shards and normalization statistics together.
 
 ## 🧪 Evaluation
 
