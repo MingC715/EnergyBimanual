@@ -61,26 +61,26 @@ For RoboTwin, set `ROBOTWIN_ROOT` to the directory containing `assets/objects/` 
 
 ## 📦 Checkpoints
 
-The model weights are being uploaded to Hugging Face. The entries below link to their SHA-256 checksums. [Hugging Face model repository](https://huggingface.co/mingchens/EnergyBimanual)
+Available checkpoints link to their downloads. The other entries link to their SHA-256 checksums. [Hugging Face model repository](https://huggingface.co/mingchens/EnergyBimanual)
 
 ```bash
-sha256sum -c CHECKSUMS.sha256
+sha256sum --check --ignore-missing CHECKSUMS.sha256
 ```
 
 ### Bimanual RLBench
 
 | Demos per task | EnergyBimanual |
 | ---: | --- |
-| 5 | [energybimanual/5demo.pth](CHECKSUMS.sha256#L3) |
-| 10 | [energybimanual/10demo.pth](CHECKSUMS.sha256#L1) |
-| 20 | [energybimanual/20demo.pth](CHECKSUMS.sha256#L2) |
+| 5 | [energybimanual/5demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/5demo.pth) |
+| 10 | [energybimanual/10demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/10demo.pth) |
+| 20 | [energybimanual/20demo.pth](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table1/energybimanual/20demo.pth) |
 
 ### RoboTwin 2.0
 
 | Demos per task | DP + DP | DP3 + DP3 | π₀ + π₀ | π₀.₅ + π₀.₅ |
 | ---: | --- | --- | --- | --- |
 | 5 | [dp/5demo.pt](CHECKSUMS.sha256#L6) | [dp3/5demo.pt](CHECKSUMS.sha256#L9) | [pi0/5demo/](CHECKSUMS.sha256#L41-L55) | [pi05/5demo/](CHECKSUMS.sha256#L90-L105) |
-| 10 | [dp/10demo.pt](CHECKSUMS.sha256#L4) | [dp3/10demo.pt](CHECKSUMS.sha256#L7) | [pi0/10demo/](CHECKSUMS.sha256#L10-L23) | [pi05/10demo/](CHECKSUMS.sha256#L56-L74) |
+| 10 | [dp/10demo.pt](https://huggingface.co/mingchens/EnergyBimanual/resolve/main/checkpoints/table2/dp/10demo.pt) | [dp3/10demo.pt](CHECKSUMS.sha256#L7) | [pi0/10demo/](CHECKSUMS.sha256#L10-L23) | [pi05/10demo/](CHECKSUMS.sha256#L56-L74) |
 | 20 | [dp/20demo.pt](CHECKSUMS.sha256#L5) | [dp3/20demo.pt](CHECKSUMS.sha256#L8) | [pi0/20demo/](CHECKSUMS.sha256#L24-L40) | [pi05/20demo/](CHECKSUMS.sha256#L75-L89) |
 
 DP and DP3 use Franka. The π policies use ALOHA and require the complete checkpoint directory, including normalization statistics.
